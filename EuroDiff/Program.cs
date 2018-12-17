@@ -80,6 +80,10 @@ namespace EuroDiff
                 {
                     city.MoveCoins(countryList, cityList, city.country, city.id);
                 }
+                foreach (City city in cityList)
+                {
+                    city.Finalise(countryList, cityList, city.country, city.id);
+                }
                 int tmpResult = 0;
                 foreach(Country country in countryList)
                 {
@@ -101,6 +105,7 @@ namespace EuroDiff
                     Console.ReadLine();
                     return;
                 }
+               
                 days++;
             }
         }

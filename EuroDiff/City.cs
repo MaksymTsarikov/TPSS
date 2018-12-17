@@ -18,6 +18,9 @@ namespace EuroDiff
     {
         public int x, y;
 
+
+        public List<int> outcomes = new List<int>();
+
         public int id;
 
         public bool IsComplete;
@@ -57,19 +60,34 @@ namespace EuroDiff
 
         public void MoveCoins(List<Country> countryList, List<City> cityList, string country, int cityId)
         {
-            List<City> tmp = Extensions.Clone<City>(cityList);
-            
-            foreach(KeyValuePair<string, int> neighboor in neighboorCities)
+
+            foreach (KeyValuePair<string, int> neighboor in neighboorCities)
             {
                 foreach(KeyValuePair<string, int> tmpCoins in this.coins.ToArray())
                 {
-                    int cnt = cityList[cityId].coins[tmpCoins.Key] / 1000;
-                    tmp[neighboor.Value].coins[tmpCoins.Key] += cnt;
-                    tmp[cityId].coins[tmpCoins.Key] -= cnt;
+                    int cntr = cityList[cityId].coins[tmpCoins.Key] / 1000;
+                    int cntrr = cntr;
+                    outcomes.Add(cntrr);
+                    /*tmp[neighboor.Value].coins[tmpCoins.Key] += cnt;
+                    tmp[cityId].coins[tmpCoins.Key] -= cnt;*/
                 }
                 
             }
-            cityList = tmp;
+        }
+        public void Finalise(List<Country> countryList, List<City> cityList, string country, int cityId)
+        {
+            int cnt = 0;
+            foreach (KeyValuePair<string, int> neighboor in neighboorCities)
+            {
+                foreach (KeyValuePair<string, int> tmpCoins in this.coins.ToArray())
+                {
+                    cityList[neighboor.Value].coins[tmpCoins.Key] += outcomes[cnt];
+                    cityList[cityId].coins[tmpCoins.Key] -= outcomes[cnt];
+                    cnt++;
+                }
+
+            }
+            outcomes.Clear();
         }
 
         public bool CheckCoins()
