@@ -151,19 +151,15 @@ namespace EuroDiff
                 {
                     city.Finalise(countryList, cityList, city.country, city.id);
                 }
-                int tmpResult = 0;
+                int completedCountries = 0;
                 foreach (Country country in countryList)
                 {
-                    if (country.IsComplete)
+                    if (country.IsComplete || country.CheckCities(cityList, countryList, days))
                     {
-                        tmpResult += 1;
-                    }
-                    else if (country.CheckCities(cityList, countryList, days))
-                    {
-                        tmpResult += 1;
+                        completedCountries += 1;
                     }
                 }
-                if (tmpResult == countryList.Count)
+                if (completedCountries == countryList.Count)
                 {
                     foreach (Country country in countryList)
                     {
