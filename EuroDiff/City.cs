@@ -31,6 +31,8 @@ namespace EuroDiff
 
         public List<KeyValuePair<string, int>> neighborCities;
 
+        public const int startingCoins = 1000000;
+
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -54,7 +56,7 @@ namespace EuroDiff
             this.x = x;
             this.y = y;
             this.country = countryName;
-            this.coins.Add(countryName, 1000000);
+            this.coins.Add(countryName, startingCoins);
             this.IsComplete = false;
         }
 
@@ -68,8 +70,6 @@ namespace EuroDiff
                     int cntr = cityList[cityId].coins[tmpCoins.Key] / 1000;
                     int cntrr = cntr;
                     outcomes.Add(cntrr);
-                    /*tmp[neighbor.Value].coins[tmpCoins.Key] += cnt;
-                    tmp[cityId].coins[tmpCoins.Key] -= cnt;*/
                 }
                 
             }
