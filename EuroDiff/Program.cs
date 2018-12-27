@@ -111,38 +111,10 @@ namespace EuroDiff
             }
             foreach (City city in cityList)
             {
-                City tmpCity = cityList.Find(c => c.x == city.x + 1 && c.y == city.y);
-                if (tmpCity != null)
-                {
-                    if (!city.neighboorCities.Contains(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id)))
-                    {
-                        city.neighboorCities.Add(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id));
-                    }
-                }
-                tmpCity = cityList.Find(c => c.x == city.x - 1 && c.y == city.y);
-                if (tmpCity != null)
-                {
-                    if (!city.neighboorCities.Contains(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id)))
-                    {
-                        city.neighboorCities.Add(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id));
-                    }
-                }
-                tmpCity = cityList.Find(c => c.y == city.y - 1 && c.x == city.x);
-                if (tmpCity != null)
-                {
-                    if (!city.neighboorCities.Contains(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id)))
-                    {
-                        city.neighboorCities.Add(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id));
-                    }
-                }
-                tmpCity = cityList.Find(c => c.y == city.y + 1 && c.x == city.x);
-                if (tmpCity != null)
-                {
-                    if (!city.neighboorCities.Contains(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id)))
-                    {
-                        city.neighboorCities.Add(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id));
-                    }
-                }
+                AddNeighborCity(cityList, 1, 0, city);
+                AddNeighborCity(cityList, -1, 0, city);
+                AddNeighborCity(cityList, 0, -1, city);
+                AddNeighborCity(cityList, 0, 1, city);
                 foreach (Country country in countryList)
                 {
                     if (!city.coins.ContainsKey(country.name))
@@ -154,9 +126,9 @@ namespace EuroDiff
             int borderCnt = 0;
             foreach(City city in cityList)
             {
-                foreach(KeyValuePair<string, int> neighboor in city.neighboorCities)
+                foreach(KeyValuePair<string, int> neighbor in city.neighborCities)
                 {
-                    if(city.country != cityList[neighboor.Value].country)
+                    if(city.country != cityList[neighbor.Value].country)
                     {
                         borderCnt++;
                     }
@@ -164,7 +136,7 @@ namespace EuroDiff
             }
             if(borderCnt == 0)
             {
-                Console.WriteLine("Not all countries have neighboors. Invalid input.");
+                Console.WriteLine("Not all countries have neighbors. Invalid input.");
                 Console.ReadLine();
                 return;
             }
@@ -202,6 +174,18 @@ namespace EuroDiff
                 }
 
                 days++;
+            }
+        }
+
+        private static void AddNeighborCity(List<City> cityList, int deltaX, int deltaY, City currentCity)
+        {
+            City tmpCity = cityList.Find(c => c.x == currentCity.x + deltaX && c.y == currentCity.y + deltaY);
+            if (tmpCity != null)
+            {
+                if (!currentCity.neighborCities.Contains(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id)))
+                {
+                    currentCity.neighborCities.Add(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id));
+                }
             }
         }
     }

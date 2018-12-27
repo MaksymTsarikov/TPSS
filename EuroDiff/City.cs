@@ -29,7 +29,7 @@ namespace EuroDiff
 
         public Dictionary<string, int> coins;
 
-        public List<KeyValuePair<string, int>> neighboorCities;
+        public List<KeyValuePair<string, int>> neighborCities;
 
         public object Clone()
         {
@@ -43,13 +43,13 @@ namespace EuroDiff
             this.x = newcity.x;
             this.y = newcity.y;
             this.IsComplete = newcity.IsComplete;
-            this.neighboorCities = newcity.neighboorCities;
+            this.neighborCities = newcity.neighborCities;
         }
 
         public City(string countryName, int x, int y, int id)
         {
             this.coins = new Dictionary<string, int>();
-            this.neighboorCities = new List<KeyValuePair<string, int>>();
+            this.neighborCities = new List<KeyValuePair<string, int>>();
             this.id = id;
             this.x = x;
             this.y = y;
@@ -61,14 +61,14 @@ namespace EuroDiff
         public void MoveCoins(List<Country> countryList, List<City> cityList, string country, int cityId)
         {
 
-            foreach (KeyValuePair<string, int> neighboor in neighboorCities)
+            foreach (KeyValuePair<string, int> neighbor in neighborCities)
             {
                 foreach(KeyValuePair<string, int> tmpCoins in this.coins.ToArray())
                 {
                     int cntr = cityList[cityId].coins[tmpCoins.Key] / 1000;
                     int cntrr = cntr;
                     outcomes.Add(cntrr);
-                    /*tmp[neighboor.Value].coins[tmpCoins.Key] += cnt;
+                    /*tmp[neighbor.Value].coins[tmpCoins.Key] += cnt;
                     tmp[cityId].coins[tmpCoins.Key] -= cnt;*/
                 }
                 
@@ -77,11 +77,11 @@ namespace EuroDiff
         public void Finalise(List<Country> countryList, List<City> cityList, string country, int cityId)
         {
             int cnt = 0;
-            foreach (KeyValuePair<string, int> neighboor in neighboorCities)
+            foreach (KeyValuePair<string, int> neighbor in neighborCities)
             {
                 foreach (KeyValuePair<string, int> tmpCoins in this.coins.ToArray())
                 {
-                    cityList[neighboor.Value].coins[tmpCoins.Key] += outcomes[cnt];
+                    cityList[neighbor.Value].coins[tmpCoins.Key] += outcomes[cnt];
                     cityList[cityId].coins[tmpCoins.Key] -= outcomes[cnt];
                     cnt++;
                 }
