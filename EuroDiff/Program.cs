@@ -10,33 +10,111 @@ namespace EuroDiff
     {
         static void Main(string[] args)
         {
-            int command = Convert.ToInt32(Console.ReadLine());
+            int command = 0;
+            while (true)
+            {
+                try
+                {
+                    command = Convert.ToInt32(Console.ReadLine());
+                    break;
+                }
+                catch
+                {
+                    Console.WriteLine("Invlid input, try again");
+                }
+            }
+
             List<Country> countryList = new List<Country>();
             List<City> cityList = new List<City>();
             for (int i = 0; i < command; i++)
             {
                 string[] countryInput = Console.ReadLine().Split(' ');
                 string countryName = countryInput[0];
-                int xl = int.Parse(countryInput[1]);
-                int yl = int.Parse(countryInput[2]);
-                int xh = int.Parse(countryInput[3]);
-                int yh = int.Parse(countryInput[4]);
-                countryList.Add(new Country(countryName, xl, yl, xh, yh));
-                for(int x = xl; x <= xh; x++)
+
+                int xl = 0;
+                try
                 {
-                    for(int y = yl; y <= yh; y++)
+                    xl = int.Parse(countryInput[1]);
+                    if (xl <= 0)
+                    {
+                        Console.WriteLine("Invalid input");
+                        i--;
+                        continue;
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Invalid input");
+                    i--;
+                    continue;
+                }
+                int yl = 0;
+                try
+                {
+                    yl = int.Parse(countryInput[2]);
+                    if (yl <= 0)
+                    {
+                        Console.WriteLine("Invalid input");
+                        i--;
+                        continue;
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Invalid input");
+                    i--;
+                    continue;
+                }
+                int xh = 0;
+                try
+                {
+                    xh = int.Parse(countryInput[3]);
+                    if (xh <= 0)
+                    {
+                        Console.WriteLine("Invalid input");
+                        i--;
+                        continue;
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Invalid input");
+                    i--;
+                    continue;
+                }
+                int yh = 0;
+                try
+                {
+                    yh = int.Parse(countryInput[4]);
+                    if (yh <= 0)
+                    {
+                        Console.WriteLine("Invalid input");
+                        i--;
+                        continue;
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Invalid input");
+                    i--;
+                    continue;
+                }
+                countryList.Add(new Country(countryName, xl, yl, xh, yh));
+                for (int x = xl; x <= xh; x++)
+                {
+                    for (int y = yl; y <= yh; y++)
                     {
                         cityList.Add(new City(countryName, x, y, cityList.Count));
                         countryList[i].CitiesIds.Add(cityList.Count - 1);
                     }
                 }
             }
-            foreach(City city in cityList)
+            foreach (City city in cityList)
             {
                 City tmpCity = cityList.Find(c => c.x == city.x + 1 && c.y == city.y);
                 if (tmpCity != null)
                 {
-                    if(!city.neighboorCities.Contains(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id)))
+                    if (!city.neighboorCities.Contains(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id)))
                     {
                         city.neighboorCities.Add(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id));
                     }
@@ -65,13 +143,30 @@ namespace EuroDiff
                         city.neighboorCities.Add(new KeyValuePair<string, int>(tmpCity.country, tmpCity.id));
                     }
                 }
-                foreach(Country country in countryList)
+                foreach (Country country in countryList)
                 {
                     if (!city.coins.ContainsKey(country.name))
                     {
                         city.coins.Add(country.name, 0);
                     }
                 }
+            }
+            int borderCnt = 0;
+            foreach(City city in cityList)
+            {
+                foreach(KeyValuePair<string, int> neighboor in city.neighboorCities)
+                {
+                    if(city.country != cityList[neighboor.Value].country)
+                    {
+                        borderCnt++;
+                    }
+                }
+            }
+            if(borderCnt == 0)
+            {
+                Console.WriteLine("Not all countries have neighboors. Invalid input.");
+                Console.ReadLine();
+                return;
             }
             int days = 1;
             while (true)
@@ -85,27 +180,27 @@ namespace EuroDiff
                     city.Finalise(countryList, cityList, city.country, city.id);
                 }
                 int tmpResult = 0;
-                foreach(Country country in countryList)
+                foreach (Country country in countryList)
                 {
                     if (country.IsComplete)
                     {
                         tmpResult += 1;
                     }
-                    else if(country.CheckCities(cityList, countryList, days))
+                    else if (country.CheckCities(cityList, countryList, days))
                     {
                         tmpResult += 1;
                     }
                 }
-                if(tmpResult == countryList.Count)
+                if (tmpResult == countryList.Count)
                 {
-                    foreach(Country country in countryList)
+                    foreach (Country country in countryList)
                     {
                         Console.WriteLine(country.name + " " + country.days);
                     }
                     Console.ReadLine();
                     return;
                 }
-               
+
                 days++;
             }
         }
