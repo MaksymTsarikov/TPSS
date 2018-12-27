@@ -31,16 +31,16 @@ namespace EuroDiff
 
         public bool CheckCities(List<City> cityList, List<Country> countryList, int days)
         {
-            int tmpResult = 0;
+            int completedCities = 0;
             foreach(City city in cityList)
             {
                 city.CheckCoins();
                 if (CitiesIds.Contains(city.id) && cityList[city.id].IsComplete)
                 {
-                    tmpResult += 1;
+                    completedCities += 1;
                 }
             }
-            if(tmpResult == CitiesIds.Count)
+            if(completedCities == CitiesIds.Count)
             {
                 this.days = days;
                 this.IsComplete = true;
